@@ -1,5 +1,13 @@
-.App {
-  text-align: center;
+.app {
+  background: #fafafa;
+  display: grid;  
+  font-family: Arial, Helvetica, sans-serif;
+  grid-template-areas: 
+      "header"
+      "form"
+      "grid";
+  grid-template-columns: auto;
+  grid-template-rows: 50px auto auto; 
 }
 
 .App-logo {

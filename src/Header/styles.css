@@ -1,0 +1,16 @@
+
+.divLogo{
+    float:left;
+   
+}
+
+.areaImagem img{
+    width:400px;
+}
+
+.divTitle p{
+    margin-top:10px;
+    float:left;
+    max-width:500px;
+    margin-left:50px;
+}
