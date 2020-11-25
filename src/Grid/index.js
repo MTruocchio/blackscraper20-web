@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,6 +7,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import api from '../services/api'
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles({
   table: {
@@ -14,20 +16,23 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(id, title, site, url, target, preco) {
-  return { id, title, site, url, target, preco };
-}
+const Grid = () => {
 
-const rows = [
-  createData(1,'Ryzen 5 3600', 'Kabum', 'http://www.google.com', 1700, 2000),
-  createData(2,'Ryzen 5 3600', 'Pichau', 'http://www.google.com', 1700, 2000),
-  createData(3,'Ryzen 5 3600', 'Terabyte', 'http://www.google.com', 1700, 2000),
-  createData(4,'Stell Legend', 'Kabum', 'http://www.google.com', 1700, 2000),
-  createData(5,'Stell Legend', 'Pichau', 'http://www.google.com', 1700, 2000),
-  
-];
+  const [items, setItems] = useState([])
 
-export default function Grid() {
+  useEffect(() =>{
+    api.get('pesquisas').then(response =>{
+      setItems(response.data.data)
+    })
+  },[])
+
+  async function handleDeleteItem(event){
+    
+    console.log(event)
+    //await api.delete('pesquisas/',event.target.id)
+    //alert(`item removido a`)
+  }
+
   const classes = useStyles();
 
   return (
@@ -37,15 +42,19 @@ export default function Grid() {
           <TableRow>
             <TableCell>Title</TableCell>
             <TableCell align="center">Site</TableCell>
-            <TableCell align="left">Preco</TableCell>
+            <TableCell align="right">Preco</TableCell>
+            <TableCell align="right">Target</TableCell>
+            <TableCell align="right">Ações</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell ><a target='_blanc'href={row.url}>{row.title}</a></TableCell>
-              <TableCell align="center">{row.site}</TableCell>
-              <TableCell align="left">{row.preco}</TableCell>
+          {items.map((itemRow) =>(
+            <TableRow key={itemRow.id}>
+              <TableCell ><a target='_blanc'href={itemRow.url}>{itemRow.title}</a></TableCell>
+              <TableCell align="center">{itemRow.site}</TableCell>
+              <TableCell align="right">{itemRow.target}</TableCell>
+              <TableCell align="right">{itemRow.target}</TableCell>
+          <TableCell align="right"><DeleteIcon id={itemRow.id} onClick={handleDeleteItem}/></TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -53,3 +62,4 @@ export default function Grid() {
     </TableContainer>
   );
 }
+export default Grid

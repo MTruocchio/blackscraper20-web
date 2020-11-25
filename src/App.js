@@ -7,7 +7,8 @@ function App() {
     <div>
       <Header title='BkackScrapper 2020'/>
       <Form />
-      <hr />
+     <br />
+     <br />
       <Grid />
     </div>
   );
