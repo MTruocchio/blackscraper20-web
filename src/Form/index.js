@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import api from '../services/api'
+import {getBlackFridayItems} from '../stores/BlackFridayStore'
+import {useDispatch} from "react-redux"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,7 +27,8 @@ const Form  = () => {
     selector: '', 
     target :'' 
   })
-  
+  const dispatch = useDispatch()
+
   function handleInputChange(event){
     const{id, value} = event.target
     setFormData({...formData, [id]: value})
@@ -36,6 +39,7 @@ const Form  = () => {
     console.log(formData)
     await api.post('pesquisas',formData)
     alert(`item ${formData.title} incluido a lista de buscas`)
+    dispatch(getBlackFridayItems())
   }
 
   return (

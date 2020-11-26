@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,8 +7,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import api from '../services/api'
 import DeleteIcon from '@material-ui/icons/Delete';
+import {useSelector, useDispatch} from "react-redux"
+import {getBlackFridayItems} from '../stores/BlackFridayStore'
+
 
 const useStyles = makeStyles({
   table: {
@@ -16,24 +18,21 @@ const useStyles = makeStyles({
   },
 });
 
+
 const Grid = () => {
+  const dispatch = useDispatch()
+  React.useEffect(() => {
+    dispatch(getBlackFridayItems())
+  }, [dispatch])
 
-  const [items, setItems] = useState([])
-
-  useEffect(() =>{
-    api.get('pesquisas').then(response =>{
-      setItems(response.data.data)
-    })
-  },[])
-
-  async function handleDeleteItem(event){
+  async function handleDeleteItem(id){
     
-    console.log(event)
     //await api.delete('pesquisas/',event.target.id)
     //alert(`item removido a`)
   }
 
   const classes = useStyles();
+  const { items } = useSelector(({blackfriday}) => blackfriday)
 
   return (
     <TableContainer component={Paper}>
@@ -48,13 +47,13 @@ const Grid = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map((itemRow) =>(
+          {items.map((itemRow, i) =>(
             <TableRow key={itemRow.id}>
               <TableCell ><a target='_blanc'href={itemRow.url}>{itemRow.title}</a></TableCell>
               <TableCell align="center">{itemRow.site}</TableCell>
               <TableCell align="right">{itemRow.target}</TableCell>
               <TableCell align="right">{itemRow.target}</TableCell>
-          <TableCell align="right"><DeleteIcon id={itemRow.id} onClick={handleDeleteItem}/></TableCell>
+          <TableCell align="right"><DeleteIcon id={itemRow.id} onClick={()=>handleDeleteItem(itemRow.id) }/></TableCell>
             </TableRow>
           ))}
         </TableBody>
